@@ -891,7 +891,7 @@
   var track = document.querySelector('.gallery-scroll');
   if(!track) return;
   var paused = false;
-  var speed = 0.5; // px per frame, tweak to go faster/slower
+  var speed = 0.4; // px per frame, tweak to go faster/slower
 
   // Duplicate the gallery items once so the strip can loop seamlessly:
   // once we've scrolled exactly one full set's width, we jump back by
@@ -901,13 +901,15 @@
     track.appendChild(item.cloneNode(true));
   });
   var setWidth = track.scrollWidth / 2;
+  var pos = 0; // tracked in full precision, separate from scrollLeft's rounded pixels
 
   function step(){
     if(!paused){
-      track.scrollLeft += speed;
-      if(track.scrollLeft >= setWidth){
-        track.scrollLeft -= setWidth;
+      pos += speed;
+      if(pos >= setWidth){
+        pos -= setWidth;
       }
+      track.scrollLeft = pos;
     }
     requestAnimationFrame(step);
   }
