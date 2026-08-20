@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSLab — Catalysis, Operando Spectroscopy &amp; Physical Chemistry | NTU Singapore</title>
+<meta name="description" content="DSLab at Nanyang Technological University: advanced catalysis, operando spectroscopy, and the physical properties of matter.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --paper: #eef0ec;
+    --paper-dim: #e4e7e0;
+    --ink: #12181b;
+    --steel: #4a5c6a;
+    --steel-soft: #7c8a94;
+    --copper: #b4502c;
+    --copper-soft: #d97a54;
+    --teal: #1b6e63;
+    --line: #cdd2c6;
+    --white: #fbfbf9;
+
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+  ::selection{ background: var(--copper); color: var(--white); }
+
+  .wrap{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- Top utility bar ---------- */
+  .topbar{
+    background: var(--ink);
+    color: var(--paper-dim);
+  }
+  .topbar .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap: 18px;
+    padding: 9px 32px;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+  }
+  .topbar a{
+    color: var(--paper-dim);
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap: 6px;
+  }
+  .topbar a:hover{ color: var(--copper-soft); }
+  .topbar svg{ width:14px; height:14px; fill:currentColor; }
+
+  /* ---------- Nav ---------- */
+  header.site{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(238,240,236,0.94);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  .brand{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.01em;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand .mark{
+    width: 20px; height: 20px;
+    border-radius: 2px;
+    background: linear-gradient(135deg, var(--copper), var(--teal));
+    display:inline-block;
+  }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap: 26px;
+    margin:0; padding:0;
+    font-family: var(--display);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  nav ul li a{
+    text-decoration:none;
+    color: var(--steel);
+    transition: color .15s ease;
+    padding-bottom: 3px;
+    border-bottom: 1px solid transparent;
+  }
+  nav ul li a:hover, nav ul li a:focus-visible{
+    color: var(--copper);
+    border-bottom-color: var(--copper);
+  }
+
+  /* ---------- Hero / banner ---------- */
+  .hero{
+    position: relative;
+    padding: 88px 0 0;
+    overflow: hidden;
+  }
+  .hero .wrap{ position: relative; z-index: 2; }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin: 0 0 18px;
+  }
+  h1.headline{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 5.6vw, 4rem);
+    line-height: 1.03;
+    letter-spacing: -0.01em;
+    margin: 0 0 24px;
+    max-width: 15ch;
+  }
+  h1.headline .accent{ color: var(--copper); }
+  .lede{
+    font-size: 1.15rem;
+    color: var(--steel);
+    max-width: 46ch;
+    margin: 0 0 32px;
+  }
+  .hero-actions{ display:flex; gap: 16px; flex-wrap: wrap; margin-bottom: 44px;}
+  .btn{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration:none;
+    padding: 12px 22px;
+    border-radius: 3px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .btn-primary{ background: var(--ink); color: var(--paper); }
+  .btn-primary:hover{ background: var(--copper); transform: translateY(-1px); }
+  .btn-ghost{ border: 1px solid var(--line); color: var(--ink); }
+  .btn-ghost:hover{ border-color: var(--copper); color: var(--copper); }
+
+  .spectrum{
+    position: absolute;
+    right: -6%;
+    top: 4%;
+    width: 58%;
+    max-width: 600px;
+    opacity: 0.9;
+    z-index: 1;
+  }
+  .spectrum path.trace{
+    fill:none; stroke: var(--copper); stroke-width: 2; stroke-linecap: round;
+    stroke-dasharray: 1400; stroke-dashoffset: 1400;
+    animation: draw 2.4s ease forwards 0.3s;
+  }
+  .spectrum path.trace.secondary{
+    stroke: var(--teal); stroke-width: 1.4; opacity: 0.55; animation-delay: 0.6s;
+  }
+  .spectrum .axis{ stroke: var(--line); stroke-width: 1; }
+  .spectrum .tick text{ font-family: var(--mono); font-size: 9px; fill: var(--steel-soft); }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce){ .spectrum path.trace{ animation: none; stroke-dashoffset: 0; } }
+  @media (max-width: 860px){ .spectrum{ display:none; } }
+
+  /* ---------- Quick program links row ---------- */
+  .programs{
+    border-top: 1px solid var(--line);
+    background: var(--white);
+  }
+  .programs .wrap{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  .program-link{
+    padding: 26px 30px;
+    text-decoration: none;
+    color: var(--ink);
+    border-right: 1px solid var(--line);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.96rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    transition: background .15s ease, color .15s ease;
+  }
+  .program-link:last-child{ border-right: none; }
+  .program-link:hover{ background: var(--paper); color: var(--copper); }
+  .program-link .arrow{ font-family: var(--mono); font-size: 0.9rem; color: var(--steel-soft); }
+  @media (max-width: 760px){
+    .programs .wrap{ grid-template-columns: 1fr; }
+    .program-link{ border-right: none; border-bottom: 1px solid var(--line); }
+  }
+
+  /* ---------- Section scaffolding ---------- */
+  section{ padding: 80px 0; border-top: 1px solid var(--line); }
+  .section-head{
+    display:flex; align-items: baseline; justify-content: space-between;
+    gap: 24px; margin-bottom: 40px; flex-wrap: wrap;
+  }
+  .section-head .tag{
+    font-family: var(--mono); font-size: 0.78rem; color: var(--copper);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  h2.section-title{
+    font-family: var(--display); font-weight: 600;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin: 6px 0 0; letter-spacing: -0.01em;
+  }
+  .section-note{ font-family: var(--body); color: var(--steel); max-width: 32ch; font-size: 0.96rem; }
+
+  /* ---------- About ---------- */
+  .about p{ max-width: 68ch; font-size: 1.06rem; color: var(--ink); }
+  .about p.dim{ color: var(--steel); }
+  .read-more{
+    font-family: var(--display); font-weight: 600; font-size: 0.9rem;
+    color: var(--copper); text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+    margin-top: 6px;
+  }
+  .read-more:hover{ text-decoration: underline; }
+
+  /* ---------- Interests grid ---------- */
+  .interests{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .interest{
+    background: var(--paper);
+    padding: 30px 28px;
+    transition: background .18s ease;
+  }
+  .interest:hover{ background: var(--white); }
+  .interest .num{
+    font-family: var(--mono); font-size: 0.78rem; color: var(--steel-soft);
+    display:block; margin-bottom: 14px;
+  }
+  .interest h3{ font-family: var(--display); font-size: 1.08rem; font-weight: 600; margin: 0 0 10px; }
+  .interest > p{ font-size: 0.94rem; color: var(--steel); margin: 0 0 14px; }
+  .interest ul{ margin:0; padding-left: 18px; font-size: 0.88rem; color: var(--steel); }
+  .interest ul li{ margin-bottom: 5px; }
+  .interest ul li::marker{ color: var(--copper); }
+
+  /* ---------- News feed (two-column) ---------- */
+  .news-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .news-col .h{
+    font-family: var(--mono); font-size: 0.76rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--teal); margin-bottom: 18px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .news-item{
+    display:flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line);
+  }
+  .news-item:last-child{ border-bottom: none; }
+  .news-item .date{
+    font-family: var(--mono); font-size: 0.76rem; color: var(--steel-soft);
+    flex: none; width: 78px; padding-top: 2px;
+  }
+  .news-item p{ margin: 0; font-size: 0.92rem; color: var(--ink); }
+  .news-item a{ color: var(--copper); text-decoration:none; border-bottom: 1px solid var(--copper-soft); }
+  .news-item a:hover{ color: var(--ink); }
+  .news-empty{
+    font-family: var(--body); font-size: 0.92rem; color: var(--steel-soft); font-style: italic;
+  }
+  @media (max-width: 760px){ .news-grid{ grid-template-columns: 1fr; gap: 32px; } }
+
+  /* ---------- PI spotlight ---------- */
+  .pi-card{
+    display:grid; grid-template-columns: 220px 1fr; gap: 48px;
+    align-items: start; padding: 44px 0; border-top: 1px solid var(--line);
+  }
+  .pi-list .pi-card:last-child{ border-bottom: 1px solid var(--line); }
+  .pi-photo{
+    width: 220px; height: 220px; border-radius: 4px; position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--display); font-weight: 700; font-size: 3rem; color: var(--white);
+  }
+  .pi-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .pi-info h3{ font-family: var(--display); font-weight: 700; font-size: 1.7rem; margin: 0 0 8px; }
+  .pi-info .role{ font-family: var(--mono); font-size: 0.85rem; color: var(--copper); margin: 0 0 18px; }
+  .pi-info p{ color: var(--steel); font-size: 1.02rem; max-width: 60ch; margin: 0 0 14px; }
+  .pi-info a.mail{ font-family: var(--mono); font-size: 0.9rem; color: var(--ink); border-bottom: 1px solid var(--steel-soft); text-decoration:none; }
+  .pi-info a.mail:hover{ color: var(--copper); border-color: var(--copper); }
+  @media (max-width: 640px){ .pi-card{ grid-template-columns: 1fr; } .pi-photo{ width: 120px; height: 120px; font-size: 1.8rem; } }
+
+  /* ---------- People ---------- */
+  .role-group{ margin-bottom: 64px; }
+  .role-group:last-child{ margin-bottom: 0; }
+  .role-label{
+    font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--teal); margin: 0 0 28px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .people-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 32px 28px; }
+  .person{ display:flex; gap: 14px; align-items:flex-start; }
+  .avatar{
+    position: relative;
+    flex: none; width: 46px; height: 46px; border-radius: 3px;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--display); font-weight: 600; font-size: 0.85rem; color: var(--white);
+    overflow: hidden;
+  }
+  .avatar img{
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .person .name{ font-family: var(--display); font-weight: 600; font-size: 0.98rem; margin: 0 0 3px; }
+  .person .focus{ font-size: 0.88rem; color: var(--steel); margin: 0 0 4px; }
+  .person .meta{ font-family: var(--mono); font-size: 0.76rem; color: var(--steel-soft); word-break: break-all; }
+  .person .meta a{ text-decoration: none; color: var(--steel-soft); }
+  .person .meta a:hover{ color: var(--copper); }
+
+  .alumni-list{ columns: 2; column-gap: 48px; font-size: 0.92rem; color: var(--steel); }
+  .alumni-list li{ break-inside: avoid; margin-bottom: 12px; }
+  @media (max-width: 640px){ .alumni-list{ columns: 1; } }
+
+  /* ---------- Footer ---------- */
+  footer.site{ background: var(--ink); color: var(--paper-dim); padding: 64px 0 0; }
+  .footer-top{ display:flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid #2a3338; }
+  .footer-brand .brand{ color: var(--white); margin-bottom: 12px; }
+  .footer-brand p{ color: var(--steel-soft); max-width: 34ch; font-size: 0.92rem; margin:0; }
+  .footer-nav{ display:flex; gap: 56px; flex-wrap: wrap; }
+  .footer-nav .col .h{
+    font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--copper-soft); margin-bottom: 14px;
+  }
+  .footer-nav .col ul{ list-style:none; margin:0; padding:0; }
+  .footer-nav .col ul li{ margin-bottom: 9px; }
+  .footer-nav .col ul li a{
+    text-decoration:none; color: var(--paper-dim); font-size: 0.9rem;
+  }
+  .footer-nav .col ul li a:hover{ color: var(--copper-soft); }
+  .foot-bottom{
+    padding: 24px 0 32px;
+    display:flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    font-family: var(--mono); font-size: 0.76rem; color: var(--steel-soft);
+  }
+
+  @media (max-width: 640px){
+    .wrap{ padding: 0 20px; }
+    nav ul{ gap: 14px; font-size: 0.78rem; }
+    section{ padding: 52px 0; }
+    .hero{ padding: 56px 0 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a href="https://github.com/DS-Labo-X" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+    <a href="mailto:dongshuang.wu@ntu.edu.sg">
+      <svg viewBox="0 0 16 16"><path d="M1 3h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2.3V12h12V5.3L8 9.5 2 5.3zm.5-.8L8 8 13.5 4.5H2.5z"/></svg>
+      Email PI
+    </a>
+  </div>
+</div>
+
+<header class="site">
+  <nav class="wrap">
+    <a href="#top" class="brand"><span class="mark" aria-hidden="true"></span>DSLab</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#pi">PI</a></li>
+      <li><a href="#news">Activity</a></li>
+      <li><a href="#people">People</a></li>
+      <li><a href="#links">Publications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero" style="border-top:none;">
+    <div class="wrap">
+      <p class="eyebrow">Nanyang Technological University · Singapore</p>
+      <h1 class="headline">Reading catalysts <span class="accent">while they work.</span></h1>
+      <p class="lede">DSLab is an interdisciplinary research group designing next-generation catalysts, resolving reaction mechanisms in real time, and using AI-driven approaches to advance clean energy and sustainable chemistry.</p>
+      <div class="hero-actions">
+        <a href="#research" class="btn btn-primary">Explore our research</a>
+        <a href="#people" class="btn btn-ghost">Meet the team</a>
+      </div>
+    </div>
+
+    <svg class="spectrum" viewBox="0 0 420 260" aria-hidden="true">
+      <line class="axis" x1="20" y1="220" x2="400" y2="220"></line>
+      <line class="axis" x1="20" y1="20" x2="20" y2="220"></line>
+      <path class="trace" d="M20,200 L60,196 L100,190 L130,150 L145,60 L160,150 L190,192 L230,186 L255,110 L268,186 L300,196 L340,192 L400,188" />
+      <path class="trace secondary" d="M20,210 L90,206 L140,204 L170,196 L200,120 L215,196 L260,202 L310,198 L360,200 L400,198" />
+      <g class="tick"><text x="140" y="236">E (eV)</text></g>
+      <g class="tick"><text x="8" y="30" transform="rotate(-90 8,30)">μ(E)</text></g>
+    </svg>
+  </section>
+
+  <div class="programs">
+    <div class="wrap">
+      <a class="program-link" href="#research"><span>Advanced Catalyst Design</span><span class="arrow">→</span></a>
+      <a class="program-link" href="#research"><span>Operando Spectroscopy</span><span class="arrow">→</span></a>
+      <a class="program-link" href="#research"><span>AI-Driven Discovery</span><span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="tag">Mission</p>
+          <h2 class="section-title">Structure, in the act of reacting</h2>
+        </div>
+        <p class="section-note">We work across catalysis, spectroscopy, and materials physics to see what static characterization misses.</p>
+      </div>
+      <p>We are an interdisciplinary research group at Nanyang Technological University (NTU), Singapore, focusing on advanced catalysis, operando spectroscopy, and the fundamental physical properties of matter.</p>
+      <p class="dim">Our mission is to design next-generation catalysts, uncover reaction mechanisms, and leverage AI-driven approaches to tackle challenges in clean energy and sustainable chemistry.</p>
+      <a class="read-more" href="#research">Read more about our research →</a>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="tag">Our interests</p>
+          <h2 class="section-title">Five threads, one lab</h2>
+        </div>
+        <p class="section-note">Structure–performance relationships in energy and chemical systems.</p>
+      </div>
+      <div class="interests">
+        <div class="interest">
+          <span class="num">01</span>
+          <h3>Metal Nanoparticles &amp; Alloys</h3>
+          <p>Phase control and morphology tuning for enhanced catalytic activity.</p>
+          <ul>
+            <li>Phase-controlled synthesis</li>
+            <li>Morphology &amp; facet tuning</li>
+            <li>Structure–activity relationships</li>
+          </ul>
+        </div>
+        <div class="interest">
+          <span class="num">02</span>
+          <h3>Liquid Metal Catalysis</h3>
+          <p>Harnessing interfacial dynamics and unique physical properties.</p>
+          <ul>
+            <li>Liquid-metal interfacial dynamics</li>
+            <li>Self-healing catalytic surfaces</li>
+            <li>Physical property studies</li>
+          </ul>
+        </div>
+        <div class="interest">
+          <span class="num">03</span>
+          <h3>Biomass Conversion &amp; Electrocatalysis</h3>
+          <p>HMF-to-FDCA, CO₂ hydrogenation, and fuel cell reactions.</p>
+          <ul>
+            <li>HMF-to-FDCA oxidation</li>
+            <li>CO₂ hydrogenation</li>
+            <li>Fuel cell reaction pathways</li>
+          </ul>
+        </div>
+        <div class="interest">
+          <span class="num">04</span>
+          <h3>Operando Spectroscopy</h3>
+          <p>HAXPES, XAFS, DRIFTS, and synchrotron-based techniques.</p>
+          <ul>
+            <li>HAXPES &amp; XAFS</li>
+            <li>DRIFTS</li>
+            <li>Synchrotron beamline studies</li>
+          </ul>
+        </div>
+        <div class="interest">
+          <span class="num">05</span>
+          <h3>AI-Driven Catalyst Design</h3>
+          <p>Combining machine learning with DFT for predictive discovery.</p>
+          <ul>
+            <li>Machine-learned potentials</li>
+            <li>DFT-guided screening</li>
+            <li>Predictive materials discovery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="tag">Lab activity</p>
+          <h2 class="section-title">Latest from the group</h2>
+        </div>
+        <p class="section-note">Publications, milestones, and comings &amp; goings.</p>
+      </div>
+      <div class="news-grid">
+        <div class="news-col">
+          <p class="h">Publications &amp; Recognition</p>
+          <p class="news-empty">Add your latest papers, awards, and press mentions here — or keep them synced from your <a href="https://ds-labo-x.github.io/publications" target="_blank" rel="noopener" style="color:var(--copper);border-bottom:1px solid var(--copper-soft);text-decoration:none;">Publications page</a>.</p>
+        </div>
+        <div class="news-col">
+          <p class="h">Group Milestones</p>
+          <p class="news-empty">New joiners, defences, conference talks, and lab activity go here — see the full <a href="https://ds-labo-x.github.io/lab-activity" target="_blank" rel="noopener" style="color:var(--copper);border-bottom:1px solid var(--copper-soft);text-decoration:none;">Lab Activity page</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pi">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="tag">Principal Investigators</p>
+          <h2 class="section-title">Led by</h2>
+        </div>
+        <p class="section-note">Two Nanyang Assistant Professors driving the lab's experimental and computational work.</p>
+      </div>
+
+      <div class="pi-list">
+        <div class="pi-card">
+          <span class="pi-photo" style="background:var(--copper)"><img src="photos/wu-dongshuang.jpg" alt="" onerror="this.remove()">WD</span>
+          <div class="pi-info">
+            <h3>Dr. WU Dongshuang</h3>
+            <p class="role">Nanyang Assistant Professor</p>
+            <p>Catalysis, advanced characterisation, and materials chemistry — leading the lab's work on structure–performance relationships in energy and chemical systems.</p>
+            <a class="mail" href="mailto:dongshuang.wu@ntu.edu.sg">dongshuang.wu@ntu.edu.sg</a>
+          </div>
+        </div>
+        <div class="pi-card">
+          <span class="pi-photo" style="background:var(--teal)"><img src="photos/li-haobo.jpg" alt="" onerror="this.remove()">LH</span>
+          <div class="pi-info">
+            <h3>Dr. LI Haobo</h3>
+            <p class="role">Nanyang Assistant Professor · DS Fellow</p>
+            <p>AI and DFT-driven approaches to catalyst design, bridging machine learning and first-principles methods for predictive materials discovery.</p>
+            <a class="mail" href="mailto:haobo.li@ntu.edu.sg">haobo.li@ntu.edu.sg</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="people">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="tag">Our people</p>
+          <h2 class="section-title">The group</h2>
+        </div>
+        <p class="section-note">Postdocs and graduate students across catalysis and spectroscopy.</p>
+      </div>
+
+      <div class="role-group">
+        <p class="role-label">Postdoctoral Researchers</p>
+        <div class="people-grid">
+          <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/deng-xiaohui.jpg" alt="" onerror="this.remove()">DX</span>
+            <div><p class="name">Dr. DENG Xiaohui</p><p class="focus">Electrocatalysis</p><p class="meta"><a href="mailto:xiaohui.deng@ntu.edu.sg">xiaohui.deng@ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/gu-huayu.jpg" alt="" onerror="this.remove()">GH</span>
+            <div><p class="name">Dr. GU Huayu</p><p class="focus">Thermal Catalysis and Modelling</p><p class="meta"><a href="mailto:huayu.gu@ntu.edu.sg">huayu.gu@ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/zan-yifan.jpg" alt="" onerror="this.remove()">ZY</span>
+            <div><p class="name">Dr. ZAN Yifan</p><p class="focus">Biomass Conversion</p><p class="meta"><a href="mailto:yifan.zan@ntu.edu.sg">yifan.zan@ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/sun-junchuan.jpg" alt="" onerror="this.remove()">SJ</span>
+            <div><p class="name">Dr. SUN Junchuan</p><p class="focus">Thermal Catalysis and Modelling</p><p class="meta"><a href="mailto:junchuan.sun@ntu.edu.sg">junchuan.sun@ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/seo-minsik.jpg" alt="" onerror="this.remove()">SM</span>
+            <div><p class="name">Dr. SEO Minsik</p><p class="focus">Operando Spectroscopy</p><p class="meta"><a href="mailto:minsik.seo@ntu.edu.sg">minsik.seo@ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/liang-shuyu.jpg" alt="" onerror="this.remove()">LS</span>
+            <div><p class="name">Dr. LIANG Shuyu</p><p class="focus">Electrocatalysis and Biomass Conversion</p><p class="meta"><a href="mailto:liangshuyu1996@gmail.com">liangshuyu1996@gmail.com</a></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="role-group">
+        <p class="role-label">PhD Students</p>
+        <div class="people-grid">
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/wang-yuanyuan.jpg" alt="" onerror="this.remove()">WY</span>
+            <div><p class="name">WANG Yuanyuan</p><p class="focus">Liquid metal nanoparticles and their physical properties</p><p class="meta">Aug 2022– · <a href="mailto:YUANYUAN004@e.ntu.edu.sg">YUANYUAN004@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/xu-yifan.jpg" alt="" onerror="this.remove()">XY</span>
+            <div><p class="name">XU Yifan</p><p class="focus">Metal alloys for electrocatalysis</p><p class="meta">Jan 2023– · <a href="mailto:YIFAN004@e.ntu.edu.sg">YIFAN004@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/zhu-bing.jpg" alt="" onerror="this.remove()">ZB</span>
+            <div><p class="name">ZHU Bing</p><p class="focus">High-entropy alloys for thermal catalysis</p><p class="meta">Aug 2023– · <a href="mailto:ZHUB0012@e.ntu.edu.sg">ZHUB0012@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/kim-minji.jpg" alt="" onerror="this.remove()">KM</span>
+            <div><p class="name">KIM Minji</p><p class="focus">Supported catalysts for water splitting</p><p class="meta">Jan 2024– · <a href="mailto:KIMM0006@e.ntu.edu.sg">KIMM0006@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/toh-ziyang.jpg" alt="" onerror="this.remove()">TZ</span>
+            <div><p class="name">TOH Ziyang</p><p class="focus">Supported catalysts for CO₂ hydrogenation</p><p class="meta">Aug 2024– · <a href="mailto:ZIYANG009@e.ntu.edu.sg">ZIYANG009@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/zhang-weijie.jpg" alt="" onerror="this.remove()">ZW</span>
+            <div><p class="name">ZHANG Weijie</p><p class="focus">Heterogeneous catalysts for organic molecule synthesis</p><p class="meta">Aug 2024– · <a href="mailto:WEIJIE003@e.ntu.edu.sg">WEIJIE003@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/zhao-wenting.jpg" alt="" onerror="this.remove()">ZW</span>
+            <div><p class="name">ZHAO Wenting</p><p class="focus">Liquid metal-based catalysts</p><p class="meta">Aug 2025– · <a href="mailto:M220168@e.ntu.edu.sg">M220168@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/huang-qiqi.jpg" alt="" onerror="this.remove()">HQ</span>
+            <div><p class="name">HUANG Qiqi</p><p class="focus">Topic to be determined</p><p class="meta">Aug 2025– · <a href="mailto:QHUANG025@e.ntu.edu.sg">QHUANG025@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/zou-aiji.jpg" alt="" onerror="this.remove()">ZA</span>
+            <div><p class="name">ZOU Aiji</p><p class="focus">Co-supervised with Prof Dong Zhili</p><p class="meta"><a href="mailto:AIJI001@e.ntu.edu.sg">AIJI001@e.ntu.edu.sg</a></p></div>
+          </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/yi-zhehan.jpg" alt="" onerror="this.remove()">YZ</span>
+            <div><p class="name">YI Zhehan</p><p class="focus">Co-supervised with Prof Fan Hongjin</p><p class="meta"><a href="mailto:ZHEHAN002@e.ntu.edu.sg">ZHEHAN002@e.ntu.edu.sg</a></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="role-group">
+        <p class="role-label">Master's, FYP &amp; URECA Students</p>
+        <div class="people-grid">
+          <div class="person"><span class="avatar" style="background:var(--steel-soft)"><img src="photos/zhai-yiwei.jpg" alt="" onerror="this.remove()">ZY</span>
+            <div><p class="name">ZHAI Yiwei</p><p class="focus">URECA Student</p><p class="meta">Sep 2025–</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="role-group">
+        <p class="role-label">Alumni</p>
+        <ul class="alumni-list">
+          <li>HUANG Shaodao — CSC visiting student, Jiangnan Univ. (2023–2024) → Lecturer, Wenzhou Univ.</li>
+          <li>HAN Zengyu — CSC visiting student, Xi'an Jiaotong Univ. (2022–2025) → Final-year PhD student</li>
+          <li>SHI Naike — CSC visiting scholar, USTB (2024–2025) → Associate Professor</li>
+          <li>ZHANG Jian — CSC visiting scholar, Wuhan Univ. of Technology (2023–2024) → Full Professor</li>
+          <li>FAN Xinhang — Master by Engineering (2023–2025) → Industry</li>
+          <li>Tian Jiayu — Master by coursework (2023–2024) → PhD, Harbin Institute of Technology</li>
+          <li>FU Haoyang — Postdoc (2023–2024) → Postdoc, NTU</li>
+          <li>NI Chuyi — Postdoc (2024–2025) → Industry</li>
+          <li>WANG Liwen — Postdoc (2022–2023) → Postdoc, Nanjing Univ.</li>
+          <li>WANG Tzu-Wei — URECA Student (2024–2025)</li>
+          <li>YU Ziying — URECA Student (2023–2024)</li>
+          <li>Desmond TOH Hong Yao — FYP student (2023)</li>
+          <li>SOO Yan — FYP student (2023)</li>
+          <li>Javine CHAN — FYP student (2024)</li>
+          <li>Firdaus Bin Mohamad Shahrin — FYP student (2025)</li>
+          <li>Praharsh Ryan S/O Subash Soman — FYP student (2025)</li>
+          <li>Chan Hung Shen — FYP student (2025)</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="links">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="tag">Elsewhere</p>
+          <h2 class="section-title">More from the lab</h2>
+        </div>
+        <p class="section-note">Publications, activity, and shared resources live alongside this page.</p>
+      </div>
+      <div class="interests" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <a class="interest" style="text-decoration:none;color:inherit;display:block;" href="https://ds-labo-x.github.io/publications" target="_blank" rel="noopener">
+          <h3>Publications ↗</h3>
+          <p>Peer-reviewed papers from the group, updated as they're accepted.</p>
+        </a>
+        <a class="interest" style="text-decoration:none;color:inherit;display:block;" href="https://ds-labo-x.github.io/lab-activity" target="_blank" rel="noopener">
+          <h3>Lab Activity ↗</h3>
+          <p>Conferences, milestones, and day-to-day life in the lab.</p>
+        </a>
+        <a class="interest" style="text-decoration:none;color:inherit;display:block;" href="https://ds-labo-x.github.io/resources" target="_blank" rel="noopener">
+          <h3>Resources ↗</h3>
+          <p>Protocols, tools, and materials shared with the group.</p>
+        </a>
+        <a class="interest" style="text-decoration:none;color:inherit;display:block;" href="https://github.com/DS-Labo-X" target="_blank" rel="noopener">
+          <h3>GitHub ↗</h3>
+          <p>Code, datasets, and analysis pipelines.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="brand"><span class="mark" aria-hidden="true"></span>DSLab</a>
+        <p>We welcome enquiries from prospective PhD students, postdocs, and collaborators working in catalysis, spectroscopy, or computational materials chemistry.</p>
+      </div>
+      <div class="footer-nav">
+        <div class="col">
+          <p class="h">Site</p>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#news">Activity</a></li>
+            <li><a href="#people">People</a></li>
+          </ul>
+        </div>
+        <div class="col">
+          <p class="h">Elsewhere</p>
+          <ul>
+            <li><a href="https://ds-labo-x.github.io/publications" target="_blank" rel="noopener">Publications</a></li>
+            <li><a href="https://ds-labo-x.github.io/lab-activity" target="_blank" rel="noopener">Lab Activity</a></li>
+            <li><a href="https://ds-labo-x.github.io/resources" target="_blank" rel="noopener">Resources</a></li>
+            <li><a href="https://github.com/DS-Labo-X" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="col">
+          <p class="h">Contact</p>
+          <ul>
+            <li><a href="mailto:dongshuang.wu@ntu.edu.sg">dongshuang.wu@ntu.edu.sg</a></li>
+            <li><a href="#top">NTU, Singapore</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>DSLab © 2026</span>
+      <span>Nanyang Technological University, Singapore</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
