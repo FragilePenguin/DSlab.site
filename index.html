@@ -408,6 +408,10 @@
     width: 100%; height: 100%;
     object-fit: cover;
   }
+  .people-grid-sm .avatar{
+    width: 64px; height: 64px; font-size: 1rem;
+  }
+  .person-text{ padding-left: 0; }
   .person .name{ font-family: var(--display); font-weight: 600; font-size: 0.98rem; margin: 0 0 3px; }
   .person .focus{ font-size: 0.88rem; color: var(--steel); margin: 0 0 4px; }
   .person .meta{ font-family: var(--mono); font-size: 0.76rem; color: var(--steel-soft); word-break: break-all; }
@@ -734,7 +738,7 @@
 
       <div class="role-group">
         <p class="role-label">PhD Students</p>
-        <div class="people-grid">
+        <div class="people-grid people-grid-sm">
           <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/wang-yuanyuan.jpg" alt="" onerror="this.remove()">WY</span>
             <div><p class="name">WANG Yuanyuan</p><p class="focus">Liquid metal nanoparticles and their physical properties</p><p class="meta">Aug 2022– · <a href="mailto:YUANYUAN004@e.ntu.edu.sg">YUANYUAN004@e.ntu.edu.sg</a></p></div>
           </div>
@@ -770,9 +774,9 @@
 
       <div class="role-group">
         <p class="role-label">Master's, FYP &amp; URECA Students</p>
-        <div class="people-grid">
-          <div class="person"><span class="avatar" style="background:var(--steel-soft)"><img src="photos/zhai-yiwei.jpg" alt="" onerror="this.remove()">ZY</span>
-            <div><p class="name">ZHAI Yiwei</p><p class="focus">URECA Student</p><p class="meta">Sep 2025–</p></div>
+        <div class="people-grid people-grid-text">
+          <div class="person person-text">
+            <p class="name">ZHAI Yiwei</p><p class="focus">URECA Student</p><p class="meta">Sep 2025–</p>
           </div>
         </div>
       </div>
