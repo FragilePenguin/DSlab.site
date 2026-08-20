@@ -668,7 +668,7 @@
           <div class="placeholder"><span class="tag">Photo</span>gallery/group-6.jpg</div>
         </div>
       </div>
-      <p class="gallery-hint">← scroll or drag to see more →</p>
+      <p class="gallery-hint">Auto-scrolling — hover or drag to pause and browse</p>
     </div>
   </section>
 
@@ -892,5 +892,32 @@
   </div>
 </footer>
 
+<script>
+(function(){
+  var track = document.querySelector('.gallery-scroll');
+  if(!track) return;
+  var paused = false;
+  var speed = 0.6; // px per frame, tweak to go faster/slower
+
+  function step(){
+    if(!paused){
+      track.scrollLeft += speed;
+      if(track.scrollLeft + track.clientWidth >= track.scrollWidth - 1){
+        track.scrollLeft = 0;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+
+  // Pause while the user is hovering, touching, or dragging so it never fights manual scroll
+  ['mouseenter','touchstart','pointerdown'].forEach(function(evt){
+    track.addEventListener(evt, function(){ paused = true; }, {passive:true});
+  });
+  ['mouseleave','touchend','pointerup'].forEach(function(evt){
+    track.addEventListener(evt, function(){ paused = false; }, {passive:true});
+  });
+})();
+</script>
 </body>
 </html>
