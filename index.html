@@ -333,7 +333,9 @@
     font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
     color: var(--teal); margin: 0 0 28px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
   }
-  .people-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 32px 28px; }
+  .people-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 32px 28px; }
+  @media (max-width: 760px){ .people-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px){ .people-grid{ grid-template-columns: 1fr; } }
   .person{ display:flex; gap: 14px; align-items:flex-start; }
   .avatar{
     position: relative;
