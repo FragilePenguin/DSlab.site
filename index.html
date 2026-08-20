@@ -312,7 +312,6 @@
     display:flex;
     gap: 18px;
     overflow-x: auto;
-    scroll-snap-type: x proximity;
     padding-bottom: 18px;
     margin: 0 -40px;
     padding-left: 40px;
@@ -330,7 +329,6 @@
     height: 226px;
     border-radius: 4px;
     overflow: hidden;
-    scroll-snap-align: start;
     background: var(--white);
     border: 1px solid var(--line);
   }
@@ -897,7 +895,7 @@
   var track = document.querySelector('.gallery-scroll');
   if(!track) return;
   var paused = false;
-  var speed = 0.6; // px per frame, tweak to go faster/slower
+  var speed = 1; // px per frame, tweak to go faster/slower
 
   function step(){
     if(!paused){
