@@ -307,6 +307,65 @@
   }
   @media (max-width: 760px){ .news-grid{ grid-template-columns: 1fr; gap: 32px; } }
 
+  /* ---------- Gallery (horizontal scroll) ---------- */
+  .gallery-scroll{
+    display:flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 18px;
+    margin: 0 -40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--steel-soft) transparent;
+  }
+  .gallery-scroll::-webkit-scrollbar{ height: 6px; }
+  .gallery-scroll::-webkit-scrollbar-thumb{ background: var(--steel-soft); border-radius: 3px; }
+  .gallery-item{
+    position: relative;
+    flex: none;
+    width: 340px;
+    height: 226px;
+    border-radius: 4px;
+    overflow: hidden;
+    scroll-snap-align: start;
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .gallery-item img, .gallery-item video{
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .gallery-item .placeholder{
+    position: absolute; inset: 0;
+    display:flex; flex-direction: column; align-items:center; justify-content:center;
+    gap: 8px;
+    border: 1px dashed var(--line);
+    color: var(--steel-soft);
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .gallery-item .placeholder .tag{
+    font-family: var(--display);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--copper);
+  }
+  .gallery-hint{
+    font-family: var(--mono); font-size: 0.8rem; color: var(--steel-soft);
+    margin: 18px 0 0;
+  }
+  @media (max-width: 640px){
+    .gallery-item{ width: 260px; height: 172px; }
+  }
+
   /* ---------- PI spotlight ---------- */
   .pi-card{
     display:grid; grid-template-columns: 220px 1fr; gap: 48px;
@@ -355,9 +414,14 @@
   .person .meta a{ text-decoration: none; color: var(--steel-soft); }
   .person .meta a:hover{ color: var(--copper); }
 
-  .alumni-list{ columns: 2; column-gap: 48px; font-size: 0.92rem; color: var(--steel); }
-  .alumni-list li{ break-inside: avoid; margin-bottom: 12px; }
-  @media (max-width: 640px){ .alumni-list{ columns: 1; } }
+  .alumni-cols{ display:grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  .alumni-col-h{
+    font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--steel-soft); margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  .alumni-list{ font-size: 0.92rem; color: var(--steel); margin:0; padding:0; list-style:none; }
+  .alumni-list li{ margin-bottom: 12px; }
+  @media (max-width: 640px){ .alumni-cols{ grid-template-columns: 1fr; gap: 32px 0; } }
 
   /* ---------- Footer ---------- */
   footer.site{ background: var(--ink); color: var(--paper-dim); padding: 64px 0 0; }
@@ -412,6 +476,7 @@
       <li><a href="#research">Research</a></li>
       <li><a href="#pi">PI</a></li>
       <li><a href="#news">Activity</a></li>
+      <li><a href="#gallery">Gallery</a></li>
       <li><a href="#people">People</a></li>
       <li><a href="#links">Publications</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -551,6 +616,58 @@
     </div>
   </section>
 
+  <section id="gallery">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="tag">Gallery</p>
+          <h2 class="section-title">Life in the lab</h2>
+        </div>
+        <p class="section-note">Scroll to browse group photos and clips.</p>
+      </div>
+
+      <div class="gallery-scroll">
+        <div class="gallery-item">
+          <img src="gallery/group-1.jpg" alt="" onerror="this.remove()">
+          <div class="placeholder"><span class="tag">Photo</span>gallery/group-1.jpg</div>
+        </div>
+        <div class="gallery-item">
+          <img src="gallery/group-2.jpg" alt="" onerror="this.remove()">
+          <div class="placeholder"><span class="tag">Photo</span>gallery/group-2.jpg</div>
+        </div>
+        <div class="gallery-item">
+          <video controls muted playsinline preload="metadata" poster="gallery/clip-1-poster.jpg" onerror="this.style.display='none'">
+            <source src="gallery/clip-1.mp4" type="video/mp4">
+          </video>
+          <div class="placeholder"><span class="tag">Video</span>gallery/clip-1.mp4</div>
+        </div>
+        <div class="gallery-item">
+          <img src="gallery/group-3.jpg" alt="" onerror="this.remove()">
+          <div class="placeholder"><span class="tag">Photo</span>gallery/group-3.jpg</div>
+        </div>
+        <div class="gallery-item">
+          <img src="gallery/group-4.jpg" alt="" onerror="this.remove()">
+          <div class="placeholder"><span class="tag">Photo</span>gallery/group-4.jpg</div>
+        </div>
+        <div class="gallery-item">
+          <video controls muted playsinline preload="metadata" poster="gallery/clip-2-poster.jpg" onerror="this.style.display='none'">
+            <source src="gallery/clip-2.mp4" type="video/mp4">
+          </video>
+          <div class="placeholder"><span class="tag">Video</span>gallery/clip-2.mp4</div>
+        </div>
+        <div class="gallery-item">
+          <img src="gallery/group-5.jpg" alt="" onerror="this.remove()">
+          <div class="placeholder"><span class="tag">Photo</span>gallery/group-5.jpg</div>
+        </div>
+        <div class="gallery-item">
+          <img src="gallery/group-6.jpg" alt="" onerror="this.remove()">
+          <div class="placeholder"><span class="tag">Photo</span>gallery/group-6.jpg</div>
+        </div>
+      </div>
+      <p class="gallery-hint">← scroll or drag to see more →</p>
+    </div>
+  </section>
+
   <section id="pi">
     <div class="wrap">
       <div class="section-head">
@@ -599,9 +716,6 @@
         <div class="people-grid">
           <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/deng-xiaohui.jpg" alt="" onerror="this.remove()">DX</span>
             <div><p class="name">Dr. DENG Xiaohui</p><p class="focus">Electrocatalysis</p><p class="meta"><a href="mailto:xiaohui.deng@ntu.edu.sg">xiaohui.deng@ntu.edu.sg</a></p></div>
-          </div>
-          <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/gu-huayu.jpg" alt="" onerror="this.remove()">GH</span>
-            <div><p class="name">Dr. GU Huayu</p><p class="focus">Thermal Catalysis and Modelling</p><p class="meta"><a href="mailto:huayu.gu@ntu.edu.sg">huayu.gu@ntu.edu.sg</a></p></div>
           </div>
           <div class="person"><span class="avatar" style="background:var(--steel)"><img src="photos/zan-yifan.jpg" alt="" onerror="this.remove()">ZY</span>
             <div><p class="name">Dr. ZAN Yifan</p><p class="focus">Biomass Conversion</p><p class="meta"><a href="mailto:yifan.zan@ntu.edu.sg">yifan.zan@ntu.edu.sg</a></p></div>
@@ -665,25 +779,36 @@
 
       <div class="role-group">
         <p class="role-label">Alumni</p>
-        <ul class="alumni-list">
-          <li>HUANG Shaodao — CSC visiting student, Jiangnan Univ. (2023–2024) → Lecturer, Wenzhou Univ.</li>
-          <li>HAN Zengyu — CSC visiting student, Xi'an Jiaotong Univ. (2022–2025) → Final-year PhD student</li>
-          <li>SHI Naike — CSC visiting scholar, USTB (2024–2025) → Associate Professor</li>
-          <li>ZHANG Jian — CSC visiting scholar, Wuhan Univ. of Technology (2023–2024) → Full Professor</li>
-          <li>FAN Xinhang — Master by Engineering (2023–2025) → Industry</li>
-          <li>Tian Jiayu — Master by coursework (2023–2024) → PhD, Harbin Institute of Technology</li>
-          <li>FU Haoyang — Postdoc (2023–2024) → Postdoc, NTU</li>
-          <li>NI Chuyi — Postdoc (2024–2025) → Industry</li>
-          <li>WANG Liwen — Postdoc (2022–2023) → Postdoc, Nanjing Univ.</li>
-          <li>WANG Tzu-Wei — URECA Student (2024–2025)</li>
-          <li>YU Ziying — URECA Student (2023–2024)</li>
-          <li>Desmond TOH Hong Yao — FYP student (2023)</li>
-          <li>SOO Yan — FYP student (2023)</li>
-          <li>Javine CHAN — FYP student (2024)</li>
-          <li>Firdaus Bin Mohamad Shahrin — FYP student (2025)</li>
-          <li>Praharsh Ryan S/O Subash Soman — FYP student (2025)</li>
-          <li>Chan Hung Shen — FYP student (2025)</li>
-        </ul>
+        <div class="alumni-cols">
+          <div class="alumni-col">
+            <p class="alumni-col-h">Postdocs &amp; Scholars</p>
+            <ul class="alumni-list">
+              <li>GU Huayu — Postdoc (2022–2026) → Distinguished Research Fellow, Inner Mongolia Univ.</li>
+              <li>NI Chuyi — Postdoc (2024–2025) → Industry</li>
+              <li>SHI Naike — CSC visiting scholar, USTB (2024–2025) → Associate Professor</li>
+              <li>FU Haoyang — Postdoc (2023–2024) → Postdoc, NTU</li>
+              <li>ZHANG Jian — CSC visiting scholar, Wuhan Univ. of Technology (2023–2024) → Full Professor</li>
+              <li>WANG Liwen — Postdoc (2022–2023) → Postdoc, Nanjing Univ.</li>
+            </ul>
+          </div>
+          <div class="alumni-col">
+            <p class="alumni-col-h">Students</p>
+            <ul class="alumni-list">
+              <li>Chan Hung Shen — FYP student (2025)</li>
+              <li>FAN Xinhang — Master by Engineering (2023–2025) → Industry</li>
+              <li>Firdaus Bin Mohamad Shahrin — FYP student (2025)</li>
+              <li>HAN Zengyu — CSC visiting student, Xi'an Jiaotong Univ. (2022–2025) → Final-year PhD student</li>
+              <li>Praharsh Ryan S/O Subash Soman — FYP student (2025)</li>
+              <li>WANG Tzu-Wei — URECA Student (2024–2025)</li>
+              <li>HUANG Shaodao — CSC visiting student, Jiangnan Univ. (2023–2024) → Lecturer, Wenzhou Univ.</li>
+              <li>Javine CHAN — FYP student (2024)</li>
+              <li>Tian Jiayu — Master by coursework (2023–2024) → PhD, Harbin Institute of Technology</li>
+              <li>YU Ziying — URECA Student (2023–2024)</li>
+              <li>Desmond TOH Hong Yao — FYP student (2023)</li>
+              <li>SOO Yan — FYP student (2023)</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
     </div>
