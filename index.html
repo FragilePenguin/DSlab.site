@@ -309,6 +309,11 @@
   .news-item p{ margin: 0; font-size: 0.92rem; color: var(--ink); }
   .news-item a{ color: var(--copper); text-decoration:none; border-bottom: 1px solid var(--copper-soft); }
   .news-item a:hover{ color: var(--ink); }
+  .milestone-scroll{
+    position: relative;
+    max-height: 280px;
+    overflow: hidden;
+  }
   .news-empty{
     font-family: var(--body); font-size: 0.92rem; color: var(--steel-soft); font-style: italic;
   }
@@ -659,19 +664,21 @@
         </div>
         <div class="news-col">
           <p class="h">Group Milestones</p>
-          <div class="news-item">
-            <span class="date">Aug 2026</span>
-            <p>Welcomed Ryan LOH Guanying and ZOU Aiji as new transfer PhD student.</p>
-          </div>
-          <div class="news-item">
-            <span class="date">Aug 2026</span>
-            <p>Welcomed WANG Xinyi as a new PhD student.</p>
-          </div>
+          <div class="milestone-scroll">
             <div class="news-item">
-            <span class="date">Sep 2026</span>
-            <p>Oral Defense completed by ZHU Bing. Congratulations Dr. ZHU</p>
+              <span class="date">Sep 2026</span>
+              <p>Oral Defense completed by ZHU Bing. Congratulations Dr. ZHU</p>
+            </div>
+            <div class="news-item">
+              <span class="date">Aug 2026</span>
+              <p>Welcomed Ryan LOH Guanying and ZOU Aiji as new transfer PhD student.</p>
+            </div>
+            <div class="news-item">
+              <span class="date">Aug 2026</span>
+              <p>Welcomed WANG Xinyi as a new PhD student.</p>
+            </div>
+            <!-- Copy a block above for each new milestone, newest at the top -->
           </div>
-          <!-- Copy the block above for each new milestone, newest at the top -->
         </div>
       </div>
     </div>
@@ -996,6 +1003,40 @@
   });
   ['mouseleave','touchend','pointerup'].forEach(function(evt){
     track.addEventListener(evt, function(){ paused = false; }, {passive:true});
+  });
+})();
+
+(function(){
+  var vtrack = document.querySelector('.milestone-scroll');
+  if(!vtrack) return;
+  var vpaused = false;
+  var vspeed = 0.3; // px per frame, tweak to go faster/slower
+
+  // Same seamless-loop technique as the gallery, but scrolling top-to-bottom.
+  var originalItems = Array.prototype.slice.call(vtrack.children);
+  originalItems.forEach(function(item){
+    vtrack.appendChild(item.cloneNode(true));
+  });
+  var vSetHeight = vtrack.scrollHeight / 2;
+  var vpos = 0;
+
+  function vstep(){
+    if(!vpaused){
+      vpos += vspeed;
+      if(vpos >= vSetHeight){
+        vpos -= vSetHeight;
+      }
+      vtrack.scrollTop = vpos;
+    }
+    requestAnimationFrame(vstep);
+  }
+  requestAnimationFrame(vstep);
+
+  ['mouseenter','touchstart','pointerdown'].forEach(function(evt){
+    vtrack.addEventListener(evt, function(){ vpaused = true; }, {passive:true});
+  });
+  ['mouseleave','touchend','pointerup'].forEach(function(evt){
+    vtrack.addEventListener(evt, function(){ vpaused = false; }, {passive:true});
   });
 })();
 </script>
