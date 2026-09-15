@@ -973,7 +973,7 @@
   var track = document.querySelector('.gallery-scroll');
   if(!track) return;
   var paused = false;
-  var speed = 0.4; // px per frame, tweak to go faster/slower
+  var speed = 0.3; // px per frame, tweak to go faster/slower
 
   // Duplicate the gallery items once so the strip can loop seamlessly:
   // once we've scrolled exactly one full set's width, we jump back by
@@ -1010,7 +1010,7 @@
   var vtrack = document.querySelector('.milestone-scroll');
   if(!vtrack) return;
   var vpaused = false;
-  var vspeed = 0.3; // px per frame, tweak to go faster/slower
+  var vspeed = 0.1; // px per frame, tweak to go faster/slower
 
   // Same seamless-loop technique as the gallery, but scrolling top-to-bottom.
   var originalItems = Array.prototype.slice.call(vtrack.children);
