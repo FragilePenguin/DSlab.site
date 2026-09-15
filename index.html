@@ -312,9 +312,7 @@
   .milestone-scroll{
     position: relative;
     max-height: 280px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--steel-soft) transparent;
+    overflow: hidden;
   }
   .pub-scroll{
     position: relative;
@@ -323,8 +321,8 @@
     scrollbar-width: thin;
     scrollbar-color: var(--steel-soft) transparent;
   }
-  .milestone-scroll::-webkit-scrollbar, .pub-scroll::-webkit-scrollbar{ width: 6px; }
-  .milestone-scroll::-webkit-scrollbar-thumb, .pub-scroll::-webkit-scrollbar-thumb{
+  .pub-scroll::-webkit-scrollbar{ width: 6px; }
+  .pub-scroll::-webkit-scrollbar-thumb{
     background: var(--steel-soft); border-radius: 3px;
   }
   .news-empty{
@@ -676,7 +674,7 @@
           <div class="pub-scroll">
             <div class="news-item">
               <span class="date">2025</span>
-              <p>Zhu, Huang, Seo, Cao, Matsumura, Gu, Wu. Stabilizing the Unstable: Enhancing OER Durability with 3d-Orbital Transition Metal Multielemental Alloy Nanoparticles by Atomically Dispersed 4d-Orbital Pd for a 100-Fold Extended Lifetime. <em>J. Am. Chem. Soc.</em> 147(13), 11250–11256. <a href="https://doi.org/10.1021/jacs.4c18109" target="_blank" rel="noopener">doi.org/10.1021/jacs.4c18109</a></p>
+              <p>Zhu et al. Stabilizing the Unstable: Enhancing OER Durability with 3d-Orbital Transition Metal Multielemental Alloy Nanoparticles by Atomically Dispersed 4d-Orbital Pd for a 100-Fold Extended Lifetime. <em>J. Am. Chem. Soc.</em> 147(13), 11250–11256. <a href="https://doi.org/10.1021/jacs.4c18109" target="_blank" rel="noopener">doi.org/10.1021/jacs.4c18109</a></p>
             </div>
             <!-- Copy a block above for each new publication, newest at the top -->
           </div>
@@ -1026,6 +1024,40 @@
   });
   ['mouseleave','touchend','pointerup'].forEach(function(evt){
     track.addEventListener(evt, function(){ paused = false; }, {passive:true});
+  });
+})();
+
+(function(){
+  var vtrack = document.querySelector('.milestone-scroll');
+  if(!vtrack) return;
+  var vpaused = false;
+  var vspeed = 0.1; // px per frame, tweak to go faster/slower
+
+  // Same seamless-loop technique as the gallery, but scrolling top-to-bottom.
+  var originalItems = Array.prototype.slice.call(vtrack.children);
+  originalItems.forEach(function(item){
+    vtrack.appendChild(item.cloneNode(true));
+  });
+  var vSetHeight = vtrack.scrollHeight / 2;
+  var vpos = 0;
+
+  function vstep(){
+    if(!vpaused){
+      vpos += vspeed;
+      if(vpos >= vSetHeight){
+        vpos -= vSetHeight;
+      }
+      vtrack.scrollTop = vpos;
+    }
+    requestAnimationFrame(vstep);
+  }
+  requestAnimationFrame(vstep);
+
+  ['mouseenter','touchstart','pointerdown'].forEach(function(evt){
+    vtrack.addEventListener(evt, function(){ vpaused = true; }, {passive:true});
+  });
+  ['mouseleave','touchend','pointerup'].forEach(function(evt){
+    vtrack.addEventListener(evt, function(){ vpaused = false; }, {passive:true});
   });
 })();
 </script>
