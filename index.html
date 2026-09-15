@@ -254,6 +254,22 @@
   .section-note{ font-family: var(--body); color: var(--steel); max-width: 32ch; font-size: 0.96rem; }
 
   /* ---------- About ---------- */
+  .about{ position: relative; overflow: hidden; }
+  .about::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(74,92,106,0.16) 1.4px, transparent 1.6px),
+      radial-gradient(circle, rgba(180,80,44,0.12) 1.2px, transparent 1.4px);
+    background-size: 30px 30px, 30px 30px;
+    background-position: 0 0, 15px 15px;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 95%);
+            mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 95%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .about .wrap{ position: relative; z-index: 1; }
   .about p{ max-width: 68ch; font-size: 1.06rem; color: var(--ink); }
   .about p.dim{ color: var(--steel); }
   .read-more{
