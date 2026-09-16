@@ -398,7 +398,12 @@
     display:flex; align-items:center; justify-content:center;
     font-family: var(--display); font-weight: 700; font-size: 3rem; color: var(--white);
   }
-  .pi-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .pi-photo img.slide{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .pi-photo img.slide.active{ opacity: 1; }
   .pi-info h3{ font-family: var(--display); font-weight: 700; font-size: 1.7rem; margin: 0 0 8px; }
   .pi-info .role{ font-family: var(--mono); font-size: 0.85rem; color: var(--copper); margin: 0 0 18px; }
   .pi-info p{ color: var(--steel); font-size: 1.02rem; max-width: 60ch; margin: 0 0 14px; }
@@ -793,7 +798,10 @@
 
       <div class="pi-list">
         <div class="pi-card">
-          <span class="pi-photo" style="background:var(--copper)"><img src="photos/wu-dongshuang.jpg" alt="" onerror="this.remove()">WD</span>
+          <span class="pi-photo" style="background:var(--copper)" data-photo-base="wu-dongshuang">
+            <img class="slide active" src="photos/wu-dongshuang.jpg" alt="" onerror="this.remove()">
+            WD
+          </span>
           <div class="pi-info">
             <h3>Dr. WU Dongshuang</h3>
             <p class="role">Nanyang Assistant Professor</p>
@@ -802,7 +810,10 @@
           </div>
         </div>
         <div class="pi-card">
-          <span class="pi-photo" style="background:var(--teal)"><img src="photos/li-haobo.jpg" alt="" onerror="this.remove()">LH</span>
+          <span class="pi-photo" style="background:var(--teal)" data-photo-base="li-haobo">
+            <img class="slide active" src="photos/li-haobo.jpg" alt="" onerror="this.remove()">
+            LH
+          </span>
           <div class="pi-info">
             <h3>Dr. LI Haobo</h3>
             <p class="role">Nanyang Assistant Professor · DS Fellow</p>
@@ -1086,6 +1097,79 @@
   });
   ['mouseleave','touchend','pointerup'].forEach(function(evt){
     vtrack.addEventListener(evt, function(){ vpaused = false; }, {passive:true});
+  });
+})();
+
+(function(){
+  // Auto-detect extra PI photos: for each .pi-photo with a data-photo-base,
+  // probe photos/{base}-2.jpg, {base}-3.jpg, ... and stop at the first one
+  // that doesn't exist. No fixed limit — upload as many as you like, in
+  // sequence with no gaps in the numbering.
+  function checkImage(src){
+    return new Promise(function(resolve){
+      var img = new Image();
+      img.onload = function(){ resolve(true); };
+      img.onerror = function(){ resolve(false); };
+      img.src = src;
+    });
+  }
+
+  function loadExtras(box){
+    var base = box.getAttribute('data-photo-base');
+    if(!base) return;
+    var n = 2;
+    var maxCheck = 500; // safety cap so a permanent server error can't loop forever
+
+    function next(){
+      if(n > maxCheck) return;
+      var src = 'photos/' + base + '-' + n + '.jpg';
+      checkImage(src).then(function(exists){
+        if(!exists) return; // stop at first gap in the numbering
+        var img = document.createElement('img');
+        img.className = 'slide';
+        img.alt = '';
+        img.src = src;
+        box.appendChild(img);
+        n++;
+        next();
+      });
+    }
+    next();
+  }
+
+  document.querySelectorAll('.pi-photo[data-photo-base]').forEach(loadExtras);
+})();
+
+(function(){
+  // PI photo hover slideshow: fades through extra photos on hover,
+  // snaps back to the original (first) photo on mouse-leave.
+  document.querySelectorAll('.pi-photo').forEach(function(box){
+    var timer = null;
+
+    function getSlides(){
+      return Array.prototype.slice.call(box.querySelectorAll('.slide'));
+    }
+
+    box.addEventListener('mouseenter', function(){
+      var slides = getSlides();
+      if(slides.length < 2) return; // nothing to cycle through
+      var idx = slides.findIndex(function(s){ return s.classList.contains('active'); });
+      if(idx === -1) idx = 0;
+      timer = setInterval(function(){
+        var current = getSlides();
+        if(current.length < 2) return;
+        current[idx].classList.remove('active');
+        idx = (idx + 1) % current.length;
+        current[idx].classList.add('active');
+      }, 1000);
+    });
+
+    box.addEventListener('mouseleave', function(){
+      if(timer){ clearInterval(timer); timer = null; }
+      getSlides().forEach(function(s, i){
+        s.classList.toggle('active', i === 0);
+      });
+    });
   });
 })();
 </script>
