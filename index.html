@@ -401,9 +401,11 @@
   .pi-photo img.slide{
     position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.9s ease-in-out;
   }
   .pi-photo img.slide.active{ opacity: 1; }
+  .pi-photo .initials{ position:relative; z-index:0; }
+  .pi-photo.has-photo .initials{ display:none; }
   .pi-info h3{ font-family: var(--display); font-weight: 700; font-size: 1.7rem; margin: 0 0 8px; }
   .pi-info .role{ font-family: var(--mono); font-size: 0.85rem; color: var(--copper); margin: 0 0 18px; }
   .pi-info p{ color: var(--steel); font-size: 1.02rem; max-width: 60ch; margin: 0 0 14px; }
@@ -799,8 +801,8 @@
       <div class="pi-list">
         <div class="pi-card">
           <span class="pi-photo" style="background:var(--copper)" data-photo-base="wu-dongshuang">
-            <img class="slide active" src="photos/wu-dongshuang.jpg" alt="" onerror="this.remove()">
-            WD
+            <span class="initials">WD</span>
+            <img class="slide active" src="photos/wu-dongshuang.jpg" alt="" onerror="this.remove()" onload="this.closest('.pi-photo').classList.add('has-photo')">
           </span>
           <div class="pi-info">
             <h3>Dr. WU Dongshuang</h3>
@@ -811,8 +813,8 @@
         </div>
         <div class="pi-card">
           <span class="pi-photo" style="background:var(--teal)" data-photo-base="li-haobo">
-            <img class="slide active" src="photos/li-haobo.jpg" alt="" onerror="this.remove()">
-            LH
+            <span class="initials">LH</span>
+            <img class="slide active" src="photos/li-haobo.jpg" alt="" onerror="this.remove()" onload="this.closest('.pi-photo').classList.add('has-photo')">
           </span>
           <div class="pi-info">
             <h3>Dr. LI Haobo</h3>
@@ -1130,6 +1132,7 @@
         img.alt = '';
         img.src = src;
         box.appendChild(img);
+        box.classList.add('has-photo');
         n++;
         next();
       });
@@ -1161,7 +1164,7 @@
         current[idx].classList.remove('active');
         idx = (idx + 1) % current.length;
         current[idx].classList.add('active');
-      }, 1000);
+      }, 1600);
     });
 
     box.addEventListener('mouseleave', function(){
