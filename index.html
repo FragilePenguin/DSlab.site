@@ -390,7 +390,7 @@
   /* ---------- PI spotlight ---------- */
   .hover-hint{
     font-family: var(--mono); font-size: 0.76rem; color: var(--steel-soft);
-    margin: -28px 0 40px;
+    max-width: 32ch; margin: 8px 0 0; text-align: right;
   }
   .pi-card{
     display:grid; grid-template-columns: 220px 1fr; gap: 48px;
@@ -799,9 +799,11 @@
           <p class="tag">Principal Investigators</p>
           <h2 class="section-title">Led by</h2>
         </div>
-        <p class="section-note">Two Nanyang Assistant Professors driving the lab's experimental and computational work.</p>
+        <div>
+          <p class="section-note">Two Nanyang Assistant Professors driving the lab's experimental and computational work.</p>
+          <p class="hover-hint">Hover over photos to see the fun side of them</p>
+        </div>
       </div>
-      <p class="hover-hint">Hover over photos to see the fun side of them</p>
 
       <div class="pi-list">
         <div class="pi-card">
