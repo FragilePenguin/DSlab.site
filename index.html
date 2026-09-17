@@ -320,11 +320,36 @@
     border: 1px solid var(--line);
   }
   .interest{
+    position: relative;
+    overflow: hidden;
     background: var(--paper);
     padding: 30px 28px;
     transition: background .18s ease;
   }
   .interest:hover{ background: var(--white); }
+  .interest-bg{ position: absolute; inset: 0; z-index: 0; }
+  .interest-bg img.slide{
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.9s ease-in-out;
+  }
+  .interest-bg img.slide.active{ opacity: 1; }
+  .interest-bg::after{
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(18,24,27,0.2), rgba(18,24,27,0.78));
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  .interest.photo-active .interest-bg::after{ opacity: 1; }
+  .interest > *{ position: relative; z-index: 1; }
+  .interest.photo-active .num{ color: rgba(255,255,255,0.8); }
+  .interest.photo-active h3{ color: #fff; }
+  .interest.photo-active > p{ color: rgba(255,255,255,0.88); }
+  .interest.photo-active ul{ color: rgba(255,255,255,0.82); }
+  .interest.photo-active ul li::marker{ color: var(--copper-soft); }
   .interest .num{
     font-family: var(--mono); font-size: 0.78rem; color: var(--steel-soft);
     display:block; margin-bottom: 14px;
@@ -692,7 +717,8 @@
         <p class="section-note">Structure–performance relationships in energy and chemical systems.</p>
       </div>
       <div class="interests">
-        <div class="interest">
+        <div class="interest" data-photo-base="01">
+          <div class="interest-bg"></div>
           <span class="num">01</span>
           <h3>Metal Nanoparticles &amp; Alloys</h3>
           <p>Phase control and morphology tuning for enhanced catalytic activity.</p>
@@ -702,7 +728,8 @@
             <li>Structure–activity relationships</li>
           </ul>
         </div>
-        <div class="interest">
+        <div class="interest" data-photo-base="02">
+          <div class="interest-bg"></div>
           <span class="num">02</span>
           <h3>Liquid Metal Catalysis</h3>
           <p>Harnessing interfacial dynamics and unique physical properties.</p>
@@ -712,7 +739,8 @@
             <li>Physical property studies</li>
           </ul>
         </div>
-        <div class="interest">
+        <div class="interest" data-photo-base="03">
+          <div class="interest-bg"></div>
           <span class="num">03</span>
           <h3>Biomass Conversion &amp; Electrocatalysis</h3>
           <p>HMF-to-FDCA, CO₂ hydrogenation, and fuel cell reactions.</p>
@@ -722,7 +750,8 @@
             <li>Fuel cell reaction pathways</li>
           </ul>
         </div>
-        <div class="interest">
+        <div class="interest" data-photo-base="04">
+          <div class="interest-bg"></div>
           <span class="num">04</span>
           <h3>Operando Spectroscopy</h3>
           <p>HAXPES, XAFS, DRIFTS, and synchrotron-based techniques.</p>
@@ -732,7 +761,8 @@
             <li>Synchrotron beamline studies</li>
           </ul>
         </div>
-        <div class="interest">
+        <div class="interest" data-photo-base="05">
+          <div class="interest-bg"></div>
           <span class="num">05</span>
           <h3>AI-Driven Catalyst Design</h3>
           <p>Combining machine learning with DFT for predictive discovery.</p>
@@ -1255,6 +1285,68 @@
       getSlides().forEach(function(s, i){
         s.classList.toggle('active', i === 0);
       });
+    });
+  });
+})();
+
+(function(){
+  // Interests section: on hover, cycle through images/{base}-1.jpg, -2.jpg, ...
+  // for the matching numbered card. No fixed limit -- stops at the first
+  // missing number. Unlike the PI photos, there's no "default" image here:
+  // moving the mouse away fades everything out, revealing the plain card.
+  function checkImage(src){
+    return new Promise(function(resolve){
+      var img = new Image();
+      img.onload = function(){ resolve(true); };
+      img.onerror = function(){ resolve(false); };
+      img.src = src;
+    });
+  }
+
+  document.querySelectorAll('.interest[data-photo-base]').forEach(function(box){
+    var bg = box.querySelector('.interest-bg');
+    var base = box.getAttribute('data-photo-base');
+    if(!bg || !base) return;
+
+    var slides = [];
+    var n = 1;
+    var maxCheck = 500;
+
+    function loadNext(){
+      if(n > maxCheck) return;
+      var src = 'interest/' + base + '-' + n + '.jpg';
+      checkImage(src).then(function(exists){
+        if(!exists) return;
+        var img = document.createElement('img');
+        img.className = 'slide';
+        img.alt = '';
+        img.src = src;
+        bg.appendChild(img);
+        slides.push(img);
+        n++;
+        loadNext();
+      });
+    }
+    loadNext();
+
+    var timer = null;
+    box.addEventListener('mouseenter', function(){
+      if(slides.length === 0) return;
+      box.classList.add('photo-active');
+      var idx = 0;
+      slides[idx].classList.add('active');
+      if(slides.length > 1){
+        timer = setInterval(function(){
+          slides[idx].classList.remove('active');
+          idx = (idx + 1) % slides.length;
+          slides[idx].classList.add('active');
+        }, 1600);
+      }
+    });
+    box.addEventListener('mouseleave', function(){
+      if(timer){ clearInterval(timer); timer = null; }
+      slides.forEach(function(s){ s.classList.remove('active'); });
+      box.classList.remove('photo-active');
     });
   });
 })();
