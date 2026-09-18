@@ -270,25 +270,40 @@
   .read-more:hover{ text-decoration: underline; }
 
   .mission-panel{ margin-top: 68px; }
-  .mission-grid{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .mission-item{
+  .mission-stack{
     position: relative;
+    width: 100%;
+    max-width: 340px;
     aspect-ratio: 4 / 3;
-    border-radius: 4px;
+    margin: 0 auto;
+  }
+  .mission-card{
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
     overflow: hidden;
     background: var(--white);
     border: 1px solid var(--line);
+    box-shadow: 0 6px 16px rgba(18,24,27,0.1);
+    transition: transform 0.9s cubic-bezier(.4,0,.2,1), box-shadow 0.9s ease, z-index 0s 0.45s;
   }
-  .mission-item img{
+  /* Fixed fan positions, like a loosely held hand of cards */
+  .mission-card:nth-child(1){ transform: rotate(-7deg) translate(-10px, 6px); z-index: 1; }
+  .mission-card:nth-child(2){ transform: rotate(-2deg) translate(-3px, 2px); z-index: 2; }
+  .mission-card:nth-child(3){ transform: rotate(3deg) translate(4px, -2px); z-index: 3; }
+  .mission-card:nth-child(4){ transform: rotate(7deg) translate(10px, -6px); z-index: 4; }
+  .mission-card.dealt{
+    transform: rotate(0deg) translate(0, 0) scale(1.04) !important;
+    box-shadow: 0 16px 32px rgba(18,24,27,0.2);
+    z-index: 10 !important;
+    transition: transform 0.9s cubic-bezier(.4,0,.2,1), box-shadow 0.9s ease, z-index 0s;
+  }
+  .mission-card img{
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
   }
-  .mission-item .placeholder{
+  .mission-card .placeholder{
     position: absolute; inset: 0;
     display:flex; flex-direction: column; align-items:center; justify-content:center;
     gap: 6px;
@@ -298,8 +313,9 @@
     font-size: 0.66rem;
     text-align: center;
     padding: 0 10px;
+    background: var(--paper);
   }
-  .mission-item .placeholder .tag{
+  .mission-card .placeholder .tag{
     font-family: var(--display);
     font-size: 0.62rem;
     text-transform: uppercase;
@@ -382,6 +398,7 @@
   .news-item p{ margin: 0; font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
   .news-item a{ color: var(--copper); text-decoration:none; border-bottom: 1px solid var(--copper-soft); }
   .news-item a:hover{ color: var(--ink); }
+  .news-item-spacer{ height: 32px; }
   .milestone-scroll{
     position: relative;
     max-height: 280px;
@@ -433,24 +450,6 @@
     width: 100%; height: 100%;
     object-fit: cover;
     display: block;
-  }
-  .gallery-item .placeholder{
-    position: absolute; inset: 0;
-    display:flex; flex-direction: column; align-items:center; justify-content:center;
-    gap: 8px;
-    border: 1px dashed var(--line);
-    color: var(--steel-soft);
-    font-family: var(--mono);
-    font-size: 0.76rem;
-    text-align: center;
-    padding: 0 20px;
-  }
-  .gallery-item .placeholder .tag{
-    font-family: var(--display);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--copper);
   }
   .gallery-hint{
     font-family: var(--mono); font-size: 0.8rem; color: var(--steel-soft);
@@ -684,20 +683,20 @@
         </div>
 
         <div class="mission-panel">
-          <div class="mission-grid">
-            <div class="mission-item">
+          <div class="mission-stack">
+            <div class="mission-card">
               <div class="placeholder"><span class="tag">TEM</span>mission/mission-1.jpg</div>
               <img src="mission/mission-1.jpg" alt="" onerror="this.remove()">
             </div>
-            <div class="mission-item">
+            <div class="mission-card">
               <div class="placeholder"><span class="tag">XAFS</span>mission/mission-2.jpg</div>
               <img src="mission/mission-2.jpg" alt="" onerror="this.remove()">
             </div>
-            <div class="mission-item">
+            <div class="mission-card">
               <div class="placeholder"><span class="tag">SEM</span>mission/mission-3.jpg</div>
               <img src="mission/mission-3.jpg" alt="" onerror="this.remove()">
             </div>
-            <div class="mission-item">
+            <div class="mission-card">
               <div class="placeholder"><span class="tag">Setup</span>mission/mission-4.jpg</div>
               <img src="mission/mission-4.jpg" alt="" onerror="this.remove()">
             </div>
@@ -852,6 +851,7 @@
               <p>Congratulations to ZHU Bing on winning the MSE research poster award.</p>
             </div>
             <!-- Copy a block above for each new milestone, newest at the top -->
+            <div class="news-item-spacer"></div>
           </div>
         </div>
       </div>
@@ -869,38 +869,8 @@
       </div>
 
       <div class="gallery-scroll">
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-1.jpg</div>
-          <img src="gallery/group-1.jpg" alt="" onerror="this.remove()">
-        </div>
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-2.jpg</div>
-          <img src="gallery/group-2.jpg" alt="" onerror="this.remove()">
-        </div>
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-7.jpg</div>
-          <img src="gallery/group-7.jpg" alt="" onerror="this.remove()">
-        </div>
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-3.jpg</div>
-          <img src="gallery/group-3.jpg" alt="" onerror="this.remove()">
-        </div>
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-4.jpg</div>
-          <img src="gallery/group-4.jpg" alt="" onerror="this.remove()">
-        </div>
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-8.jpg</div>
-          <img src="gallery/group-8.jpg" alt="" onerror="this.remove()">
-        </div>
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-5.jpg</div>
-          <img src="gallery/group-5.jpg" alt="" onerror="this.remove()">
-        </div>
-        <div class="gallery-item">
-                    <div class="placeholder"><span class="tag">Photo</span>gallery/group-6.jpg</div>
-          <img src="gallery/group-6.jpg" alt="" onerror="this.remove()">
-        </div>
+        <!-- Populated automatically by script at the bottom of the page,
+             from gallery/group-1.jpg, group-2.jpg, group-3.jpg, ... -->
       </div>
       <p class="gallery-hint">Auto-scrolling — hover or drag to pause and browse</p>
     </div>
@@ -1155,38 +1125,78 @@
 (function(){
   var track = document.querySelector('.gallery-scroll');
   if(!track) return;
-  var paused = false;
-  var speed = 0.3; // px per frame, tweak to go faster/slower
 
-  // Duplicate the gallery items once so the strip can loop seamlessly:
-  // once we've scrolled exactly one full set's width, we jump back by
-  // that same width — since the next set is identical, it looks continuous.
-  var originalChildren = Array.prototype.slice.call(track.children);
-  originalChildren.forEach(function(item){
-    track.appendChild(item.cloneNode(true));
-  });
-  var setWidth = track.scrollWidth / 2;
-  var pos = 0; // tracked in full precision, separate from scrollLeft's rounded pixels
+  // Auto-detect gallery photos: probe gallery/group-1.jpg, group-2.jpg, ...
+  // and stop at the first missing number. No fixed limit — upload as many
+  // as you like, in sequence with no gaps in the numbering.
+  function checkImage(src){
+    return new Promise(function(resolve){
+      var img = new Image();
+      img.onload = function(){ resolve(true); };
+      img.onerror = function(){ resolve(false); };
+      img.src = src;
+    });
+  }
 
-  function step(){
-    if(!paused){
-      pos += speed;
-      if(pos >= setWidth){
-        pos -= setWidth;
+  function loadPhotos(){
+    var n = 1;
+    var maxCheck = 1000; // safety cap
+
+    function next(){
+      if(n > maxCheck){ startScroll(); return; }
+      var src = 'gallery/group-' + n + '.jpg';
+      checkImage(src).then(function(exists){
+        if(!exists){ startScroll(); return; }
+        var item = document.createElement('div');
+        item.className = 'gallery-item';
+        var img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        item.appendChild(img);
+        track.appendChild(item);
+        n++;
+        next();
+      });
+    }
+    next();
+  }
+
+  function startScroll(){
+    if(track.children.length < 2) return; // nothing to loop with 0 or 1 photo
+    var paused = false;
+    var speed = 0.3; // px per frame, tweak to go faster/slower
+
+    // Duplicate the gallery items once so the strip can loop seamlessly:
+    // once we've scrolled exactly one full set's width, we jump back by
+    // that same width — since the next set is identical, it looks continuous.
+    var originalChildren = Array.prototype.slice.call(track.children);
+    originalChildren.forEach(function(item){
+      track.appendChild(item.cloneNode(true));
+    });
+    var setWidth = track.scrollWidth / 2;
+    var pos = 0; // tracked in full precision, separate from scrollLeft's rounded pixels
+
+    function step(){
+      if(!paused){
+        pos += speed;
+        if(pos >= setWidth){
+          pos -= setWidth;
+        }
+        track.scrollLeft = pos;
       }
-      track.scrollLeft = pos;
+      requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
 
-  // Pause while the user is hovering, touching, or dragging so it never fights manual scroll
-  ['mouseenter','touchstart','pointerdown'].forEach(function(evt){
-    track.addEventListener(evt, function(){ paused = true; }, {passive:true});
-  });
-  ['mouseleave','touchend','pointerup'].forEach(function(evt){
-    track.addEventListener(evt, function(){ paused = false; }, {passive:true});
-  });
+    ['mouseenter','touchstart','pointerdown'].forEach(function(evt){
+      track.addEventListener(evt, function(){ paused = true; }, {passive:true});
+    });
+    ['mouseleave','touchend','pointerup'].forEach(function(evt){
+      track.addEventListener(evt, function(){ paused = false; }, {passive:true});
+    });
+  }
+
+  loadPhotos();
 })();
 
 (function(){
@@ -1357,6 +1367,22 @@
       box.classList.remove('photo-active');
     });
   });
+})();
+
+(function(){
+  // Mission stack: continuously "deals" each card to the front in turn,
+  // like fanning through a hand of cards, then settles back into the fan.
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.mission-card'));
+  if(cards.length < 2) return;
+  var idx = 0;
+
+  function dealNext(){
+    cards.forEach(function(c){ c.classList.remove('dealt'); });
+    cards[idx].classList.add('dealt');
+    idx = (idx + 1) % cards.length;
+  }
+  dealNext();
+  setInterval(dealNext, 2400);
 })();
 </script>
 </body>
