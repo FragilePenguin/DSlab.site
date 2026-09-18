@@ -285,42 +285,17 @@
     background: var(--white);
     border: 1px solid var(--line);
     box-shadow: 0 6px 16px rgba(18,24,27,0.1);
-    transition: transform 0.9s cubic-bezier(.4,0,.2,1), box-shadow 0.9s ease, z-index 0s 0.45s;
+    transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
-  /* Fixed fan positions, like a loosely held hand of cards */
-  .mission-card:nth-child(1){ transform: rotate(-7deg) translate(-10px, 6px); z-index: 1; }
-  .mission-card:nth-child(2){ transform: rotate(-2deg) translate(-3px, 2px); z-index: 2; }
-  .mission-card:nth-child(3){ transform: rotate(3deg) translate(4px, -2px); z-index: 3; }
-  .mission-card:nth-child(4){ transform: rotate(7deg) translate(10px, -6px); z-index: 4; }
   .mission-card.dealt{
-    transform: rotate(0deg) translate(0, 0) scale(1.04) !important;
-    box-shadow: 0 16px 32px rgba(18,24,27,0.2);
-    z-index: 10 !important;
-    transition: transform 0.9s cubic-bezier(.4,0,.2,1), box-shadow 0.9s ease, z-index 0s;
+    transform: translateY(-6px) scale(1.045) rotate(0deg) !important;
+    box-shadow: 0 18px 36px rgba(18,24,27,0.22);
   }
   .mission-card img{
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-  }
-  .mission-card .placeholder{
-    position: absolute; inset: 0;
-    display:flex; flex-direction: column; align-items:center; justify-content:center;
-    gap: 6px;
-    border: 1px dashed var(--line);
-    color: var(--steel-soft);
-    font-family: var(--mono);
-    font-size: 0.66rem;
-    text-align: center;
-    padding: 0 10px;
-    background: var(--paper);
-  }
-  .mission-card .placeholder .tag{
-    font-family: var(--display);
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--copper);
   }
   @media (max-width: 860px){
     .about-grid{ grid-template-columns: 1fr; }
@@ -684,22 +659,8 @@
 
         <div class="mission-panel">
           <div class="mission-stack">
-            <div class="mission-card">
-              <div class="placeholder"><span class="tag">TEM</span>mission/mission-1.jpg</div>
-              <img src="mission/mission-1.jpg" alt="" onerror="this.remove()">
-            </div>
-            <div class="mission-card">
-              <div class="placeholder"><span class="tag">XAFS</span>mission/mission-2.jpg</div>
-              <img src="mission/mission-2.jpg" alt="" onerror="this.remove()">
-            </div>
-            <div class="mission-card">
-              <div class="placeholder"><span class="tag">SEM</span>mission/mission-3.jpg</div>
-              <img src="mission/mission-3.jpg" alt="" onerror="this.remove()">
-            </div>
-            <div class="mission-card">
-              <div class="placeholder"><span class="tag">Setup</span>mission/mission-4.jpg</div>
-              <img src="mission/mission-4.jpg" alt="" onerror="this.remove()">
-            </div>
+            <!-- Populated automatically by script at the bottom of the page,
+                 from mission/mission-1.jpg, mission-2.jpg, mission-3.jpg, ... -->
           </div>
         </div>
       </div>
@@ -1370,19 +1331,84 @@
 })();
 
 (function(){
-  // Mission stack: continuously "deals" each card to the front in turn,
-  // like fanning through a hand of cards, then settles back into the fan.
-  var cards = Array.prototype.slice.call(document.querySelectorAll('.mission-card'));
-  if(cards.length < 2) return;
-  var idx = 0;
+  // Mission stack: auto-detects mission/mission-1.jpg, mission-2.jpg, ...
+  // (no fixed limit, stops at the first missing number), fans them out
+  // like a loosely held hand of cards, and continuously deals each one
+  // to the front in turn before it settles to the back of the pile.
+  var stack = document.querySelector('.mission-stack');
+  if(!stack) return;
 
-  function dealNext(){
-    cards.forEach(function(c){ c.classList.remove('dealt'); });
-    cards[idx].classList.add('dealt');
-    idx = (idx + 1) % cards.length;
+  function checkImage(src){
+    return new Promise(function(resolve){
+      var img = new Image();
+      img.onload = function(){ resolve(true); };
+      img.onerror = function(){ resolve(false); };
+      img.src = src;
+    });
   }
-  dealNext();
-  setInterval(dealNext, 2400);
+
+  function loadCards(){
+    var n = 1;
+    var maxCheck = 1000;
+
+    function next(){
+      if(n > maxCheck){ setup(); return; }
+      var src = 'mission/mission-' + n + '.jpg';
+      checkImage(src).then(function(exists){
+        if(!exists){ setup(); return; }
+        var card = document.createElement('div');
+        card.className = 'mission-card';
+        var img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        card.appendChild(img);
+        stack.appendChild(card);
+        n++;
+        next();
+      });
+    }
+    next();
+  }
+
+  function setup(){
+    var cards = Array.prototype.slice.call(stack.children);
+    if(cards.length === 0) return;
+
+    // Fan the cards evenly across a rotation range, scaled to how many there are,
+    // so this looks right whether there are 2 cards or 20.
+    var maxAngle = Math.min(10, 3 + cards.length * 1.2);
+    var maxOffset = Math.min(14, 4 + cards.length * 1.5);
+    cards.forEach(function(card, i){
+      var t = cards.length > 1 ? (i / (cards.length - 1)) : 0.5; // 0..1
+      var angle = -maxAngle + t * (maxAngle * 2);
+      var offset = -maxOffset + t * (maxOffset * 2);
+      card.dataset.restTransform = 'rotate(' + angle.toFixed(1) + 'deg) translate(' + offset.toFixed(1) + 'px, ' + (-offset * 0.5).toFixed(1) + 'px)';
+      card.style.transform = card.dataset.restTransform;
+    });
+
+    if(cards.length < 2) return; // nothing to cycle with just one card
+
+    // order[] tracks stacking from back to front; the last entry is always on top.
+    var order = cards.map(function(_, i){ return i; });
+
+    function applyOrder(){
+      order.forEach(function(cardIndex, pos){
+        var card = cards[cardIndex];
+        card.style.zIndex = pos + 1;
+        var isFront = pos === order.length - 1;
+        card.classList.toggle('dealt', isFront);
+        if(!isFront){ card.style.transform = card.dataset.restTransform; }
+      });
+    }
+    applyOrder();
+
+    setInterval(function(){
+      order.push(order.shift());
+      applyOrder();
+    }, 2400);
+  }
+
+  loadCards();
 })();
 </script>
 </body>
