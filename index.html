@@ -240,7 +240,7 @@
   section{ padding: 80px 0; border-top: 1px solid var(--line); }
   .section-head{
     position: relative;
-    display:flex; align-items: baseline; justify-content: space-between;
+    display:flex; align-items: flex-start; justify-content: space-between;
     gap: 24px; margin-bottom: 40px; flex-wrap: wrap;
   }
   .section-head .tag{
@@ -252,7 +252,7 @@
     font-size: clamp(1.6rem, 3vw, 2.2rem);
     margin: 6px 0 0; letter-spacing: -0.01em;
   }
-  .section-note{ font-family: var(--body); color: var(--steel); max-width: 32ch; font-size: 0.96rem; }
+  .section-note{ font-family: var(--body); color: var(--steel); max-width: 32ch; font-size: 0.96rem; margin: 27px 0 0; }
 
   /* ---------- About ---------- */
   .about-grid{
@@ -652,7 +652,7 @@
               <p class="tag">Mission</p>
               <h2 class="section-title">Structure, in the act of reacting</h2>
             </div>
-            <p class="section-note">We work across catalysis, spectroscopy, and materials physics to see what static characterization misses.</p>
+            <p class="section-note" style="max-width:52ch;">We work across catalysis, spectroscopy, and materials physics to see what static characterization misses.</p>
           </div>
 
           <div class="about-text">
@@ -680,7 +680,7 @@
           <h2 class="section-title">Five threads, one lab</h2>
         </div>
         <div>
-          <p class="section-note">Structure–performance relationships in energy and chemical systems.</p>
+          <p class="section-note" style="max-width:34ch;">Structure–performance relationships in energy and chemical systems.</p>
           <p class="hover-hint">Hover over each section to see a little sneak peak of the works</p>
         </div>
       </div>
@@ -751,7 +751,7 @@
           <p class="tag">Lab activity</p>
           <h2 class="section-title">Latest from the group</h2>
         </div>
-        <p class="section-note">Publications, milestones, and comings &amp; goings.</p>
+        <p class="section-note" style="max-width:24ch;">Publications, milestones, and comings &amp; goings.</p>
       </div>
       <div class="news-grid">
         <div class="news-col">
@@ -834,7 +834,7 @@
           <p class="tag">Gallery</p>
           <h2 class="section-title">Life in the lab</h2>
         </div>
-        <p class="section-note">Scroll to browse group photos and clips.</p>
+        <p class="section-note" style="max-width:21ch;">Scroll to browse group photos and clips.</p>
       </div>
 
       <div class="gallery-scroll">
@@ -853,7 +853,7 @@
           <h2 class="section-title">Led by</h2>
         </div>
         <div>
-          <p class="section-note">Two Nanyang Assistant Professors driving the lab's experimental and computational work.</p>
+          <p class="section-note" style="max-width:44ch;">Two Nanyang Assistant Professors driving the lab's experimental and computational work.</p>
           <p class="hover-hint">Hover over photos to see the fun side of them</p>
         </div>
       </div>
@@ -894,7 +894,7 @@
           <p class="tag">Our people</p>
           <h2 class="section-title">The group</h2>
         </div>
-        <p class="section-note">Postdocs and graduate students across catalysis and spectroscopy.</p>
+        <p class="section-note" style="max-width:32ch;">Postdocs and graduate students across catalysis and spectroscopy.</p>
       </div>
 
       <div class="role-group">
@@ -1023,7 +1023,7 @@
           <p class="tag">Elsewhere</p>
           <h2 class="section-title">More from the lab</h2>
         </div>
-        <p class="section-note">Publications, activity, and shared resources live alongside this page.</p>
+        <p class="section-note" style="max-width:35ch;">Publications, activity, and shared resources live alongside this page.</p>
       </div>
       <div class="interests" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
         <a class="interest" style="text-decoration:none;color:inherit;display:block;" href="https://ds-labo-x.github.io/publications" target="_blank" rel="noopener">
