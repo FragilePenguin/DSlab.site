@@ -809,10 +809,6 @@
         <div class="news-col">
           <p class="h">Group Milestones</p>
           <div class="milestone-scroll">
-             <div class="news-item">
-              <span class="date">Sep 2026</span>
-              <p>Had a DS Lab bonding session with bowling and bbq. (photos in gallery)</p>
-            </div>
             <div class="news-item">
               <span class="date">Sep 2026</span>
               <p>Congratulations to Dr GU Huayu on the acceptance of his manuscript in JACS.</p>
@@ -972,6 +968,9 @@
           <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/loh-guanying.jpg" alt="" onerror="this.remove()">ZA</span>
             <div><p class="name">Ryan LOH Guanying</p><p class="focus">Hydrogen Embrittlement Mitigation in Steels</p><p class="meta"><a href="mailto:RYAN0103@e.ntu.edu.sg">RYAN0103@e.ntu.edu.sg</a></p></div>
           </div>
+          <div class="person"><span class="avatar" style="background:var(--copper-soft)"><img src="photos/yi-zhehan.jpg" alt="" onerror="this.remove()">YZ</span>
+            <div><p class="name">YI Zhehan</p><p class="focus">Co-supervised with Prof Fan Hongjin</p><p class="meta"><a href="mailto:ZHEHAN002@e.ntu.edu.sg">ZHEHAN002@e.ntu.edu.sg</a></p></div>
+          </div>
         </div>
       </div>
 
@@ -1010,7 +1009,6 @@
           <div class="alumni-col">
             <p class="alumni-col-h">Students</p>
             <ul class="alumni-list">
-              <li>Yi Zhehan — Co-supervised PhD student (2025)</li>
               <li>Chan Hung Shen — FYP student (2025)</li>
               <li>FAN Xinhang — Master by Engineering (2023–2025) → Industry</li>
               <li>Firdaus Bin Mohamad Shahrin — FYP student (2025)</li>
@@ -1124,14 +1122,24 @@
   }
 
   function loadPhotos(){
+    var found = [];
     var n = 1;
     var maxCheck = 1000; // safety cap
 
     function next(){
-      if(n > maxCheck){ startScroll(); return; }
+      if(n > maxCheck){ finish(); return; }
       var src = 'gallery/group-' + n + '.jpg';
       checkImage(src).then(function(exists){
-        if(!exists){ startScroll(); return; }
+        if(!exists){ finish(); return; }
+        found.push(src);
+        n++;
+        next();
+      });
+    }
+
+    function finish(){
+      // Highest number first, group-1 last.
+      found.reverse().forEach(function(src){
         var item = document.createElement('div');
         item.className = 'gallery-item';
         var img = document.createElement('img');
@@ -1139,10 +1147,10 @@
         img.alt = '';
         item.appendChild(img);
         track.appendChild(item);
-        n++;
-        next();
       });
+      startScroll();
     }
+
     next();
   }
 
@@ -1177,7 +1185,12 @@
       track.addEventListener(evt, function(){ paused = true; }, {passive:true});
     });
     ['mouseleave','touchend','pointerup'].forEach(function(evt){
-      track.addEventListener(evt, function(){ paused = false; }, {passive:true});
+      track.addEventListener(evt, function(){
+        // Pick up from wherever the user actually scrolled to, instead of
+        // snapping back to the old auto-scroll position.
+        pos = track.scrollLeft % setWidth;
+        paused = false;
+      }, {passive:true});
     });
   }
 
